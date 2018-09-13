@@ -1,0 +1,28 @@
+{
+  "name": "notifications-api",
+  "version": "0.0.1",
+  "description": "Node.js api for shared notifications",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "lint": "./node_modules/.bin/eslint ./src",
+    "test": "echo 'No tests found'"
+  },
+  "author": "FEF team",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.13"
+  },
+  "devDependencies": {
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "mocha": "^5.2.0"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
+}
