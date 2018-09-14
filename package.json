@@ -9,7 +9,6 @@
     "test": "echo 'No tests found'"
   },
   "author": "FEF team",
-  "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
