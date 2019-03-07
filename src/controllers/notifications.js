@@ -1,19 +1,24 @@
-const Notifications = require('../dao/notifications');
+const Notifications = require('../models/notification');
 const { HTTP_STATUS_CODES } = require('./constants');
 
-function getNotifications(req, res) {
-  const {
-    category,
-    isRead,
-    page,
-    perPage,
-  } = req.body;
+function transformNotification({ _doc: notification }) {
+  return {
+    ...notification,
+    ID: notification._id,
+    _id: undefined,
+    __v: undefined,
+  };
+}
 
-  Notifications.getNotifications(category, isRead, page, perPage)
+function getNotifications(req, res) {
+  const { category, isRead } = req.body;
+  const { page, perPage } = req.query;
+
+  Notifications.getNotifications(category, isRead, +page, +perPage)
     .then((result) => {
       res
         .status(HTTP_STATUS_CODES.OK)
-        .send({ notifications: result });
+        .send({ notifications: result.map(transformNotification) });
     })
     .catch((error) => {
       res
@@ -24,10 +29,10 @@ function getNotifications(req, res) {
 
 function markNotificationsAsRead(req, res) {
   Notifications.markNotificationsAsRead()
-    .then((result) => {
+    .then(() => {
       res
         .status(HTTP_STATUS_CODES.OK)
-        .send({ notifications: result });
+        .end();
     })
     .catch((error) => {
       res
@@ -38,10 +43,10 @@ function markNotificationsAsRead(req, res) {
 
 function markNotificationAsRead(req, res) {
   Notifications.markNotificationAsRead(req.params.id)
-    .then((result) => {
+    .then(() => {
       res
         .status(HTTP_STATUS_CODES.OK)
-        .send({ notification: result });
+        .end();
     })
     .catch((error) => {
       res
