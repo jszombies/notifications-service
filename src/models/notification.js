@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema({
-  createdOn: Date,
+  createdOn: {
+    type: Date,
+    default: new Date(),
+  },
   isRead: {
     type: Boolean,
     default: false,
