@@ -36,6 +36,11 @@ function getNotifications(category, isRead, page, perPage) {
   return Notification.find(query, fields, pagination);
 }
 
+// Is used only for fixtures
+function createNotification(notification = {}) {
+  return Notification.create(notification);
+}
+
 function markNotificationsAsRead() {
   const query = { isRead: false };
   const modification = { $set: { isRead: true, readOn: new Date() } };
@@ -48,4 +53,9 @@ function markNotificationAsRead(id) {
   return Notification.updateOne(query, modification);
 }
 
-module.exports = { getNotifications, markNotificationsAsRead, markNotificationAsRead };
+module.exports = {
+  getNotifications,
+  markNotificationsAsRead,
+  markNotificationAsRead,
+  createNotification,
+};
