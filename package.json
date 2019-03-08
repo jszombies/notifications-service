@@ -1,14 +1,14 @@
 {
   "name": "notifications-api",
   "version": "0.0.1",
-  "description": "Node.js api for shared notifications",
+  "description": "Node.js api for notifications",
   "main": "src/index.js",
   "scripts": {
     "start": "node ./src/index.js",
     "lint": "eslint ./src",
     "test": "echo 'No tests found'"
   },
-  "author": "FEF team",
+  "author": "maksim.lysakou@gmail.com",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
