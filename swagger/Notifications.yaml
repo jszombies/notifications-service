@@ -16,7 +16,7 @@ paths:
     get:
       summary: Get a list of Notifications
       description: >
-        This API delivers the Notifications in a structured collection with additional pagination information.
+        This API delivers the Notifications in a structured collection.
       tags:
       - Notification
       parameters:
@@ -33,7 +33,7 @@ paths:
         - WARN
       - name: isRead
         in: query
-        description: in case when isRead not set - read and not read notifications will be returned with ORDER BY read_on ASC, created_on DESC
+        description: in case when isRead not set - read and not read notifications will be returned
         type: boolean
         enum:
         - true
@@ -54,8 +54,6 @@ paths:
       responses:
         '200':
           description: successful request
-        '401':
-          description: Unauthorized - Access denied
         '405':
           description: Not allowed - Method is not allowed on the current resource
         '500':
@@ -73,8 +71,6 @@ paths:
       responses:
         '200':
           description: successful request
-        '401':
-          description: Unauthorized - Access denied
         '405':
           description: Not allowed - Method is not allowed on the current resource
         '500':
@@ -99,8 +95,6 @@ paths:
       responses:
         '200':
           description: successful request
-        '401':
-          description: Unauthorized - Access denied
         '405':
           description: Not allowed - Method is not allowed on the current resource
         '500':
