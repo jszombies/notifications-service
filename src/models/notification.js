@@ -29,14 +29,18 @@ const notificationSchema = new mongoose.Schema({
 
 const Notification = mongoose.model('Notification', notificationSchema);
 
-function getNotifications(category, isRead, page, perPage) {
+function getNotifications(category, isRead, page, perPage, sortBy, sortOrder = 'asc') {
   const query = {};
   if (category !== undefined) query.category = category;
   if (isRead !== undefined) query.isRead = isRead;
 
   const fields = null;
-  const pagination = { skip: page * perPage, limit: perPage };
-  return Notification.find(query, fields, pagination);
+  const options = {
+    skip: page * perPage,
+    limit: perPage,
+    sort: { [sortBy]: sortOrder.toLowerCase() === 'desc' ? -1 : 1 },
+  };
+  return Notification.find(query, fields, options);
 }
 
 // Is used only for fixtures

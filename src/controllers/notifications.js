@@ -16,11 +16,16 @@ const asyncController = route => (req, res) => {
 
 async function getNotifications(req, res) {
   const { category, isRead } = req.body;
-  const { page: originalPage, perPage: originalPerPage } = req.query;
-  const page = +(originalPage || 0);
-  const perPage = +(originalPerPage || 0);
-
+  const {
+    page: originalPage,
+    perPage: originalPerPage,
+    sortBy,
+    sortOrder,
+  } = req.query;
   const notificationsCount = (await Notifications.getNotifications()).length;
+
+  const page = +(originalPage || 1);
+  const perPage = +(originalPerPage || notificationsCount);
 
   if (page < 1) {
     res
@@ -30,7 +35,14 @@ async function getNotifications(req, res) {
   }
 
   // (page - 1) - this statement is here because mongodb's pagination starts from 0
-  const notifications = await Notifications.getNotifications(category, isRead, page - 1, perPage);
+  const notifications = await Notifications.getNotifications(
+    category,
+    isRead,
+    page - 1,
+    perPage,
+    sortBy,
+    sortOrder,
+  );
 
   res
     .status(HTTP_STATUS_CODES.OK)
