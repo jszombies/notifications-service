@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { SORTING } = require('../constants');
 
 const notificationSchema = new mongoose.Schema({
   createdOn: {
@@ -29,14 +30,18 @@ const notificationSchema = new mongoose.Schema({
 
 const Notification = mongoose.model('Notification', notificationSchema);
 
-function getNotifications(category, isRead, page, perPage) {
+function getNotifications(category, isRead, page, perPage, sortBy, sortOrder = SORTING.ASC) {
   const query = {};
   if (category !== undefined) query.category = category;
   if (isRead !== undefined) query.isRead = isRead;
 
   const fields = null;
-  const pagination = { skip: page * perPage, limit: perPage };
-  return Notification.find(query, fields, pagination);
+  const options = {
+    skip: page * perPage,
+    limit: perPage,
+    sort: { [sortBy]: sortOrder.toLowerCase() === SORTING.DECS ? -1 : 1 },
+  };
+  return Notification.find(query, fields, options);
 }
 
 // Is used only for fixtures

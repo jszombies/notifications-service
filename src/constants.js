@@ -6,7 +6,7 @@ const HTTP_STATUS_CODES = {
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
 };
+const SORTING = { ASC: 'asc', DECS: 'desc' };
+const RESPONSE_DATA_LIMIT = 150;
 
-module.exports = {
-  HTTP_STATUS_CODES,
-};
+module.exports = { HTTP_STATUS_CODES, SORTING, RESPONSE_DATA_LIMIT };
