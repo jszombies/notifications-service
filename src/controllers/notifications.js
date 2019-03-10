@@ -10,20 +10,39 @@ function transformNotification({ _doc: notification }) {
   };
 }
 
-function getNotifications(req, res) {
-  const { category, isRead } = req.body;
-  const { page, perPage } = req.query;
+const asyncController = route => (req, res) => {
+  Promise.resolve(route(req, res)).catch(console.error);
+};
 
-  Notifications.getNotifications(category, isRead, +page, +perPage)
-    .then((result) => {
-      res
-        .status(HTTP_STATUS_CODES.OK)
-        .send({ notifications: result.map(transformNotification) });
-    })
-    .catch((error) => {
-      res
-        .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
-        .send({ error });
+async function getNotifications(req, res) {
+  const { category, isRead } = req.body;
+  const { page: originalPage, perPage: originalPerPage } = req.query;
+  const page = +(originalPage || 0);
+  const perPage = +(originalPerPage || 0);
+
+  const notificationsCount = (await Notifications.getNotifications()).length;
+
+  if (page < 1) {
+    res
+      .status(HTTP_STATUS_CODES.BAD_REQUEST)
+      .send({ error: '\'page\' should be greater than 0' });
+    return;
+  }
+
+  // (page - 1) - this statement is here because mongodb's pagination starts from 0
+  const notifications = await Notifications.getNotifications(category, isRead, page - 1, perPage);
+
+  res
+    .status(HTTP_STATUS_CODES.OK)
+    .send({
+      notifications: notifications.map(transformNotification),
+      pagination: {
+        notificationsCount,
+        total: Math.ceil(notificationsCount / perPage),
+        page,
+        perPage,
+        hasNext: notificationsCount > page * perPage,
+      },
     });
 }
 
@@ -55,4 +74,8 @@ function markNotificationAsRead(req, res) {
     });
 }
 
-module.exports = { getNotifications, markNotificationsAsRead, markNotificationAsRead };
+module.exports = {
+  getNotifications: asyncController(getNotifications),
+  markNotificationsAsRead,
+  markNotificationAsRead,
+};
