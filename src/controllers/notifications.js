@@ -1,5 +1,5 @@
 const Notifications = require('../models/notification');
-const { HTTP_STATUS_CODES } = require('./constants');
+const { HTTP_STATUS_CODES, RESPONSE_DATA_LIMIT } = require('./constants');
 
 function transformNotification({ _doc: notification }) {
   return {
@@ -17,15 +17,25 @@ const asyncController = route => (req, res) => {
 async function getNotifications(req, res) {
   const { category, isRead } = req.body;
   const {
-    page: originalPage,
+    page,
     perPage: originalPerPage,
     sortBy,
     sortOrder,
   } = req.query;
-  const notificationsCount = (await Notifications.getNotifications()).length;
 
-  const page = +(originalPage || 1);
-  const perPage = +(originalPerPage || notificationsCount);
+  if (page === undefined) {
+    res
+      .status(HTTP_STATUS_CODES.BAD_REQUEST)
+      .send({ error: '\'page\' is required' });
+    return;
+  }
+
+  if (originalPerPage === undefined) {
+    res
+      .status(HTTP_STATUS_CODES.BAD_REQUEST)
+      .send({ error: '\'perPage\' is required' });
+    return;
+  }
 
   if (page < 1) {
     res
@@ -33,6 +43,8 @@ async function getNotifications(req, res) {
       .send({ error: '\'page\' should be greater than 0' });
     return;
   }
+
+  const perPage = Math.min(+originalPerPage || RESPONSE_DATA_LIMIT, RESPONSE_DATA_LIMIT);
 
   // (page - 1) - this statement is here because mongodb's pagination starts from 0
   const notifications = await Notifications.getNotifications(
@@ -43,6 +55,8 @@ async function getNotifications(req, res) {
     sortBy,
     sortOrder,
   );
+
+  const notificationsCount = (await Notifications.getNotifications()).length;
 
   res
     .status(HTTP_STATUS_CODES.OK)

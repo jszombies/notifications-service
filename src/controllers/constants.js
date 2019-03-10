@@ -7,6 +7,9 @@ const HTTP_STATUS_CODES = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+const RESPONSE_DATA_LIMIT = 150;
+
 module.exports = {
   HTTP_STATUS_CODES,
+  RESPONSE_DATA_LIMIT,
 };
