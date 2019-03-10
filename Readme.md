@@ -20,6 +20,11 @@ To generate mock data you need to set up some environment variables before appli
 * `APPLY_FIXTURES: "true"` - to enable mock data generation (`10` notifications by default)
 * `FIXTURES_COUNT: 20` - to generate exact amount of data
 
+You can set these variables in docker-compose.yml:18 if you are running the service as a docker container.
+Or you can set these variables using `cross-env` if you are running the service as a node.js app:
+
+`cross-env MONGO_URL=... APPLY_FIXTURES=true FIXTURES_COUNT=20 yarn start`
+
 ## API Documentation
 Swagger documentation for service API is located [here](swagger/Notifications.yaml).
 
