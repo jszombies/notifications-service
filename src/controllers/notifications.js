@@ -1,5 +1,5 @@
 const Notifications = require('../models/notification');
-const { HTTP_STATUS_CODES, RESPONSE_DATA_LIMIT } = require('./constants');
+const { HTTP_STATUS_CODES, RESPONSE_DATA_LIMIT } = require('../constants');
 
 function transformNotification({ _doc: notification }) {
   return {

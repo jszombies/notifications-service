@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { SORTING } = require('../constants');
 
 const notificationSchema = new mongoose.Schema({
   createdOn: {
@@ -29,7 +30,7 @@ const notificationSchema = new mongoose.Schema({
 
 const Notification = mongoose.model('Notification', notificationSchema);
 
-function getNotifications(category, isRead, page, perPage, sortBy, sortOrder = 'asc') {
+function getNotifications(category, isRead, page, perPage, sortBy, sortOrder = SORTING.ASC) {
   const query = {};
   if (category !== undefined) query.category = category;
   if (isRead !== undefined) query.isRead = isRead;
@@ -38,7 +39,7 @@ function getNotifications(category, isRead, page, perPage, sortBy, sortOrder = '
   const options = {
     skip: page * perPage,
     limit: perPage,
-    sort: { [sortBy]: sortOrder.toLowerCase() === 'desc' ? -1 : 1 },
+    sort: { [sortBy]: sortOrder.toLowerCase() === SORTING.DECS ? -1 : 1 },
   };
   return Notification.find(query, fields, options);
 }
