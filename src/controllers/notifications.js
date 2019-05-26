@@ -15,12 +15,13 @@ const asyncController = route => (req, res) => {
 };
 
 async function getNotifications(req, res) {
-  const { category, isRead } = req.body;
   const {
     page,
     perPage: originalPerPage,
     sortBy,
     sortOrder,
+    category,
+    isRead,
   } = req.query;
 
   if (page === undefined) {
