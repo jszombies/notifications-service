@@ -57,7 +57,14 @@ async function getNotifications(req, res) {
     sortOrder,
   );
 
-  const notificationsCount = (await Notifications.getNotifications()).length;
+  const notificationsCount = (await Notifications.getNotifications(
+    category,
+    isRead,
+    0,
+    0,
+    sortBy,
+    sortOrder,
+  )).length;
 
   res
     .status(HTTP_STATUS_CODES.OK)
