@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const notificationsRoute = require('./routes/notifications');
 const applyFixtures = require('./fixtures');
 const { APP_PORT } = require('./config');
@@ -8,6 +9,10 @@ const { APP_PORT } = require('./config');
 const app = express();
 
 // Middleware
+app.use(cors({
+  preflightContinue: true,
+  optionsSuccessStatus: 200,
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
